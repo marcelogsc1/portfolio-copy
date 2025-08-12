@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portfólio – óculos refinado + ícones um pouco mais baixos</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root{ --scale:1; --playerScale:1.08 }
+*{margin:0;padding:0;box-sizing:border-box;image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges}
+html,body{height:100%}
+body{font-family:'VT323',monospace;background:#0a0a0a;color:#fff}
+
+/* ===== Stage/Wrapper ===== */
+#stage{position:relative;width:100vw;height:100vh;overflow:auto;background:#0a0a0a}
+#wrapper{position:relative;width:calc(1024px * var(--scale));height:calc(768px * var(--scale));margin:0 auto}
+
+/* Jogo 1024x768 escalado */
+#gameContainer{position:absolute;top:0;left:0;width:1024px;height:768px;overflow:hidden;transform:scale(var(--scale));transform-origin:top left;box-shadow:0 0 50px rgba(0,0,0,0.8)}
+#backgroundImage{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url('https://i.imgur.com/TfBPn55.png');background-size:cover;background-position:center;background-repeat:no-repeat;filter:brightness(0.9)}
+#gameLayer{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10}
+
+/* UI que escala junto */
+#uiLayer{position:absolute;inset:0;z-index:100;pointer-events:none}
+#uiLayer *{pointer-events:auto}
+
+/* ===== Fileira de ícones (levemente acima do centro) ===== */
+#iconRow{position:absolute;left:50%;top:49%; /* estava 46%; abaixei levemente */
+  transform:translate(-50%,-50%);display:flex;gap:26px;align-items:flex-end;z-index:20;pointer-events:auto}
+
+/* Tiles 72px com animação suave */
+.interactive-object{position:relative;width:72px;height:72px;overflow:visible}
+.tile-inner{position:absolute;inset:0;border-radius:14px;display:block;cursor:pointer;background:linear-gradient(180deg,rgba(20,20,40,.95),rgba(10,10,20,.95));border:3px solid rgba(0,0,0,.35);box-shadow:0 10px 20px rgba(0,0,0,.45), inset 0 2px 8px rgba(255,255,255,.06);will-change:transform;animation:floatY 3.8s ease-in-out infinite;transition:filter .25s ease, transform .15s ease}
+.tile-inner:hover{filter:brightness(1.09) drop-shadow(0 10px 24px rgba(0,0,0,.6));transform:translateY(-5px) scale(1.04)}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* Ícone (emoji) dentro do quadrado */
+.tile-inner::before{content:'❓';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:34px;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+/* sombra no chão */
+.tile-inner::after{content:'';position:absolute;left:10%;bottom:-6px;width:80%;height:6px;background:rgba(0,0,0,.35);border-radius:50%;filter:blur(6px)}
+
+/* Variações + animações dos ícones */
+.work-desk .tile-inner{ background:linear-gradient(180deg,#A8683A,#7B4A27); border-color:#5b3a1f }
+.work-desk .tile-inner::before{ content:'📝' }
+
+.computer-station .tile-inner{ background:linear-gradient(180deg,#2C3E50,#1B2A36); border-color:#0f1a22 }
+.computer-station .tile-inner::before{ content:'💻'; animation:screenGlow 2s infinite }
+@keyframes screenGlow{0%,100%{filter:brightness(1) drop-shadow(0 0 4px rgba(52,152,219,.5))}50%{filter:brightness(1.2) drop-shadow(0 0 8px rgba(52,152,219,.8))}}
+
+.bookshelf .tile-inner{ background:linear-gradient(180deg,#6D4C41,#4E342E); border-color:#3E2723 }
+.bookshelf .tile-inner::before{ content:'📚' }
+
+.portfolio-stand .tile-inner{ background:linear-gradient(180deg,#E74C3C,#A93226); border-color:#922B21 }
+.portfolio-stand .tile-inner::before{ content:'🎨' }
+
+.contact-phone .tile-inner{ background:linear-gradient(180deg,#27AE60,#1E8449); border-color:#145A32 }
+.contact-phone .tile-inner::before{ content:'📞'; animation:ring 2s infinite }
+@keyframes ring{0%,100%{transform:translate(-50%,-50%) rotate(0)}10%,30%{transform:translate(-50%,-50%) rotate(-10deg)}20%,40%{transform:translate(-50%,-50%) rotate(10deg)}}
+
+.treasure-chest .tile-inner{ background:linear-gradient(180deg,#FFC107,#FF9800); border-color:#B9770E; box-shadow:0 10px 24px rgba(255,193,7,.25), inset 0 2px 10px rgba(255,255,255,.15)}
+.treasure-chest .tile-inner::before{ content:'⭐'; animation:starSpin 3s linear infinite }
+@keyframes starSpin{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* ===== Player (camisa branca, gravata preta, óculos refinado) ===== */
+#player{position:absolute;width:32px;height:44px;z-index:50;transform:scale(var(--playerScale));transform-origin:center bottom}
+.player-sprite{width:100%;height:100%;position:relative}
+.player-shadow{position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);width:24px;height:8px;background:rgba(0,0,0,.3);border-radius:50%;filter:blur(2px)}
+.player-head{position:absolute;top:1px;left:50%;transform:translateX(-50%);width:20px;height:20px;background:#FFCCB3;border:2px solid #2C3E50;border-radius:50%;z-index:2}
+.player-hair{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:22px;height:12px;background:#3D2314;border:2px solid #2C3E50;border-radius:50% 50% 0 0;z-index:3}
+.player-eyes{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:14px;height:6px;display:flex;justify-content:space-between;z-index:4}
+.eye{width:3px;height:3px;background:#1c1c1c;border-radius:50%}
+/* ÓCULOS finos (formato real) */
+.glasses{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:20px;height:8px;z-index:5}
+.glasses::before,.glasses::after{content:'';position:absolute;top:0;width:8px;height:6px;border:2px solid #3a4a5a;border-radius:3px;background:rgba(255,255,255,.08)}
+.glasses::before{left:0}
+.glasses::after{right:0}
+.glasses-bridge{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:6px;height:2px;background:#3a4a5a;border-radius:2px;z-index:5}
+.player-body{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:22px;height:15px;background:#ffffff;border:2px solid #2C3E50;border-radius:4px 4px 2px 2px;z-index:1;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.tie{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:6px solid #111}
+.tie::after{content:'';position:absolute;top:4px;left:-3px;width:6px;height:7px;background:#111;transform:rotate(45deg);border-radius:1px}
+.player-legs{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:18px;height:10px;display:flex;justify-content:space-between}
+.leg{width:6px;height:10px;background:#2C3E50;border-radius:0 0 2px 2px}
+.player-walking .leg:first-child{animation:walkLeft .3s infinite}
+.player-walking .leg:last-child{animation:walkRight .3s infinite}
+.player-walking .player-sprite{animation:bob .3s infinite}
+@keyframes walkLeft{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes walkRight{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+
+/* ===== HUD (nome + título) ===== */
+#hud{position:absolute;top:22px;left:160px;background:linear-gradient(135deg,rgba(0,0,0,.9) 0%,rgba(20,20,40,.9) 100%);border:2px solid rgba(255,215,0,.6);border-radius:16px;padding:18px 24px;color:#fff;z-index:101;box-shadow:0 8px 24px rgba(0,0,0,.6);backdrop-filter:blur(10px);max-width:62%;max-height:45%;overflow:auto}
+.hud-title{font-size:28px;color:#FFD700;margin-bottom:6px;text-shadow:0 2px 4px rgba(0,0,0,.5)}
+.hud-subtitle{font-size:18px;color:#87CEEB;opacity:.95}
+
+/* Instruções */
+#controls{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,rgba(0,0,0,.9) 0%,rgba(20,20,40,.9) 100%);border:2px solid rgba(255,215,0,.6);border-radius:24px;padding:10px 24px;color:#fff;font-size:16px;z-index:101;box-shadow:0 8px 24px rgba(0,0,0,.6);backdrop-filter:blur(10px);max-width:92%;white-space:nowrap;overflow:auto}
+.key{background:linear-gradient(135deg,#444 0%,#666 100%);padding:3px 8px;border-radius:4px;margin:0 3px;border:1px solid #888;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+
+/* Controles de áudio */
+#audioControls{position:absolute;top:20px;right:20px;z-index:101;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#audioControls .btn{cursor:pointer;border:none;color:#fff;font-size:16px;padding:8px 14px;border-radius:999px;background:linear-gradient(135deg,rgba(0,0,0,.9),rgba(20,20,40,.9));border:2px solid rgba(255,215,0,.6);box-shadow:0 6px 16px rgba(0,0,0,.5)}
+#audioControls select{appearance:none;background:linear-gradient(135deg,rgba(0,0,0,.9),rgba(20,20,40,.9));color:#fff;border:2px solid rgba(255,215,0,.6);border-radius:999px;padding:8px 12px;font-size:16px;box-shadow:0 6px 16px rgba(0,0,0,.5)}
+#audioStatus{color:#FFD700;margin-left:6px}
+
+/* Hint acima do quadrado */
+.interaction-hint{position:absolute;top:-58px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,rgba(0,0,0,.95) 0%,rgba(20,20,40,.95) 100%);color:#FFD700;padding:8px 16px;border-radius:22px;border:2px solid #FFD700;font-size:16px;white-space:nowrap;display:none;pointer-events:none;z-index:60;box-shadow:0 4px 12px rgba(255,215,0,.3)}
+.show-hint .interaction-hint{display:block;animation:hintPulse 1s infinite}
+@keyframes hintPulse{0%,100%{transform:translateX(-50%) translateY(0) scale(1);box-shadow:0 4px 12px rgba(255,215,0,.3)}50%{transform:translateX(-50%) translateY(-4px) scale(1.03);box-shadow:0 6px 16px rgba(255,215,0,.5)}}
+
+/* Modal com scroll */
+#modalBackdrop{position:absolute;inset:0;background:rgba(0,0,0,.65);opacity:0;pointer-events:none;transition:opacity .2s;z-index:102}
+#modalBackdrop.active{opacity:1;pointer-events:auto}
+#infoModal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);width:min(720px,92%);height:min(640px,88%);background:linear-gradient(135deg,#1A252F 0%,#2C3E50 50%,#34495E 100%);border:3px solid #FFD700;border-radius:16px;padding:0;z-index:103;display:grid;grid-template-rows:auto 1fr;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.8)}
+#infoModal.active{transform:translate(-50%,-50%) scale(1)}
+.modal-header{background:linear-gradient(135deg,rgba(255,215,0,.25) 0%,rgba(255,215,0,.1) 100%);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid rgba(255,215,0,.3);min-height:64px}
+.modal-title{color:#FFD700;font-size:26px;text-shadow:0 2px 8px rgba(255,215,0,.5)}
+.modal-close{cursor:pointer;font-size:22px;line-height:1;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:2px solid #FF3B3B;color:#fff;background:linear-gradient(135deg,#FF3B3B,#FF6B6B);box-shadow:0 0 0 2px rgba(255,59,59,.2),0 8px 20px rgba(255,59,59,.35);transition:transform .15s ease, box-shadow .15s ease}
+.modal-close:hover{transform:scale(1.08);box-shadow:0 0 0 3px rgba(255,59,59,.35),0 10px 26px rgba(255,59,59,.5)}
+.modal-close::before{content:'✕';font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+#modalContent{overflow:auto;width:100%;height:100%;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-gutter:stable both-edges}
+#modalContent::-webkit-scrollbar{width:12px;height:12px}
+#modalContent::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#FFD700,#FFA500);border-radius:6px}
+.modal-scroll-inner{min-width:760px;padding:24px}
+.modal-section{background:rgba(255,255,255,.05);border:1px solid rgba(255,215,0,.2);padding:18px;border-radius:12px;margin-bottom:18px;backdrop-filter:blur(5px)}
+.modal-section h3{color:#FFD700;margin-bottom:12px;font-size:22px;text-shadow:0 2px 4px rgba(0,0,0,.3)}
+.modal-section p{font-size:18px;line-height:1.6;margin-bottom:8px}
+.skill-bar{background:rgba(0,0,0,.4);height:28px;margin:10px 0;border-radius:14px;overflow:hidden;border:1px solid rgba(255,215,0,.3)}
+.skill-fill{height:100%;background:linear-gradient(90deg,#27AE60,#52BE80,#27AE60);background-size:200% 100%;display:flex;align-items:center;padding-left:12px;font-size:16px;font-weight:bold;transition:width 1.5s cubic-bezier(.4,0,.2,1);animation:shimmer 2s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Controles externos */
+#viewControls{position:fixed;left:50%;bottom:8px;transform:translateX(-50%);display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,rgba(0,0,0,.85),rgba(20,20,40,.85));border:2px solid rgba(255,215,0,.6);border-radius:999px;padding:8px 14px;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.6);backdrop-filter:blur(8px)}
+#zoomRange{width:240px}
+#zoomPct{min-width:46px;text-align:right;color:#FFD700}
+</style>
+</head>
+<body>
+  <div id="stage">
+    <div id="wrapper">
+      <div id="gameContainer">
+        <div id="backgroundImage"></div>
+
+        <div id="gameLayer">
+          <div id="iconRow"></div>
+          <!-- Player -->
+          <div id="player">
+            <div class="player-sprite">
+              <div class="player-shadow"></div>
+              <div class="player-hair"></div>
+              <div class="player-head"></div>
+              <div class="player-eyes"><div class="eye"></div><div class="eye"></div></div>
+              <div class="glasses"></div>
+              <div class="glasses-bridge"></div>
+              <div class="player-body"></div>
+              <div class="tie"></div>
+              <div class="player-legs"><div class="leg"></div><div class="leg"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UI -->
+        <div id="uiLayer">
+          <div id="hud">
+            <div class="hud-title">Marcelo Correia</div>
+            <div class="hud-subtitle">Copywriter Sênior | Level: Expert</div>
+          </div>
+
+          <div id="controls">
+            <span class="key">↑↓←→</span> ou <span class="key">WASD</span> Mover
+            <span style="margin:0 10px;">|</span>
+            <span class="key">E</span> Interagir
+            <span style="margin:0 10px;">|</span>
+            <span class="key">ESC</span> Fechar
+          </div>
+
+          <div id="audioControls">
+            <button id="musicToggle" class="btn" aria-pressed="true" title="Ativar/Desativar música">🔊 Música: <span id="audioStatus">On</span></button>
+            <select id="musicPreset" title="Trocar versão da música">
+              <option value="v3" selected>Lofi Nintendo – C maior (suave)</option>
+              <option value="v1">Lofi medieval – D dórico</option>
+              <option value="v2">Lofi campestre – G mixolídio</option>
+            </select>
+          </div>
+
+          <div id="modalBackdrop"></div>
+          <div id="infoModal">
+            <div class="modal-header">
+              <div class="modal-title" id="modalTitle">Informação</div>
+              <div class="modal-close" id="modalCloseBtn" aria-label="Fechar"></div>
+            </div>
+            <div class="modal-content" id="modalContent" tabindex="0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="viewControls">
+      <label title="Ajuste automático para caber na tela">
+        <input type="checkbox" id="autoFit" checked>
+        Auto (responsivo)
+      </label>
+      <label>
+        Zoom
+        <input type="range" id="zoomRange" min="0.6" max="2" value="1" step="0.05" disabled>
+      </label>
+      <span id="zoomPct">100%</span>
+    </div>
+  </div>
+
+<script>
+/* ===== Constantes/helpers ===== */
+const BASE_W=1024, BASE_H=768; let scale=1; function clamp(v,min,max){return Math.max(min,Math.min(max,v));} function isModalOpen(){return document.getElementById('infoModal').classList.contains('active');}
+
+/* ===== Player & Input ===== */
+const player=document.getElementById('player'); const gameContainer=document.getElementById('gameContainer');
+let playerX=512, playerY=420; let keys={}, nearObject=null, isWalking=false, target=null;
+
+/* ===== Responsividade ===== */
+const stage=document.getElementById('stage'); const wrapper=document.getElementById('wrapper'); const autoFit=document.getElementById('autoFit'); const zoomRange=document.getElementById('zoomRange'); const zoomPct=document.getElementById('zoomPct');
+function applyScale(s){scale=s; if(!Number.isFinite(scale)||scale<=0.1) scale=1; document.documentElement.style.setProperty('--scale', String(scale)); wrapper.style.width=(BASE_W*scale)+'px'; wrapper.style.height=(BASE_H*scale)+'px'; zoomRange.value=scale.toFixed(2); zoomPct.textContent=Math.round(scale*100)+'%';}
+function fitToWindow(){const s=Math.min(stage.clientWidth/BASE_W, stage.clientHeight/BASE_H); applyScale(Math.max(0.6, Math.min(1.6, s)));}
+window.addEventListener('resize',()=>{if(autoFit.checked) fitToWindow();});
+autoFit.addEventListener('change',()=>{if(autoFit.checked){zoomRange.disabled=true;fitToWindow();}else{zoomRange.disabled=false;applyScale(parseFloat(zoomRange.value));}});
+zoomRange.addEventListener('input',()=>{if(!autoFit.checked) applyScale(parseFloat(zoomRange.value));});
+
+/* ===== Input ===== */
+document.addEventListener('keydown',(e)=>{const k=e.key.toLowerCase(); keys[k]=true; if(e.key==='Escape'){closeModal();return;} const closes=['e','w','a','s','d','arrowup','arrowdown','arrowleft','arrowright']; if(closes.includes(k) && isModalOpen()){e.preventDefault();closeModal();} if(k==='e' && !isModalOpen() && nearObject){openModal(nearObject);} ensureAudioStarted(); if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(k)){target=null;}});
+document.addEventListener('keyup',(e)=>{keys[e.key.toLowerCase()]=false;});
+function stageClickToWorld(ev){if(ev.target.closest('#uiLayer, #viewControls')) return null; const rect=gameContainer.getBoundingClientRect(); const x=(ev.clientX-rect.left)/scale; const y=(ev.clientY-rect.top)/scale; if(isNaN(x)||isNaN(y)) return null; return {x:clamp(x,16,BASE_W-16), y:clamp(y,22,BASE_H-22)};}
+gameContainer.addEventListener('pointerdown',(ev)=>{ensureAudioStarted(); const pos=stageClickToWorld(ev); if(pos){target=pos;}});
+
+function movePlayer(){const speed=2.6; let dx=0,dy=0,moving=false; if(keys['arrowup']||keys['w']){dy=-speed; moving=true;} if(keys['arrowdown']||keys['s']){dy=speed; moving=true;} if(keys['arrowleft']||keys['a']){dx=-speed; moving=true;} if(keys['arrowright']||keys['d']){dx=speed; moving=true;} if(moving){target=null;} else if(target){const vx=target.x-playerX, vy=target.y-playerY; const dist=Math.hypot(vx,vy); if(dist>speed){dx=(vx/dist)*speed; dy=(vy/dist)*speed; moving=true;}else{playerX=target.x; playerY=target.y; target=null;}} playerX=clamp(playerX+dx,16,BASE_W-16); playerY=clamp(playerY+dy,22,BASE_H-22); player.style.left=playerX+'px'; player.style.top=playerY+'px'; if(moving && !isWalking){player.classList.add('player-walking'); isWalking=true;} else if(!moving && isWalking){player.classList.remove('player-walking'); isWalking=false;} checkNearObjects();}
+
+/* ===== Ícones ===== */
+const objects=[
+  { id:'desk', class:'work-desk', info:'sobre', label:'Sobre Mim' },
+  { id:'computer', class:'computer-station', info:'experiencia', label:'Experiência' },
+  { id:'bookshelf', class:'bookshelf', info:'habilidades', label:'Habilidades' },
+  { id:'portfolio', class:'portfolio-stand', info:'portfolio', label:'Portfólio' },
+  { id:'phone', class:'contact-phone', info:'contato', label:'Contato' },
+  { id:'chest', class:'treasure-chest', info:'bonus', label:'??? Segredo ???' }
+];
+function createObjects(){const iconRow=document.getElementById('iconRow'); objects.forEach(obj=>{const el=document.createElement('div'); el.className='interactive-object '+obj.class; el.dataset.info=obj.info; el.dataset.label=obj.label; const inner=document.createElement('span'); inner.className='tile-inner'; el.appendChild(inner); const hint=document.createElement('div'); hint.className='interaction-hint'; hint.innerHTML='Pressione <span class="key">E</span> para interagir'; el.appendChild(hint); iconRow.appendChild(el);});}
+function checkNearObjects(){nearObject=null; const s=scale; const playerCenterX=(playerX+16)*s; const playerCenterY=(playerY+20)*s; const containerRect=gameContainer.getBoundingClientRect(); document.querySelectorAll('.interactive-object').forEach(obj=>{const rect=obj.getBoundingClientRect(); const objX=rect.left-containerRect.left+rect.width/2; const objY=rect.top-containerRect.top+rect.height/2; const dist=Math.hypot(playerCenterX-objX, playerCenterY-objY); if(dist<85){obj.classList.add('show-hint'); nearObject=obj.dataset.info;} else {obj.classList.remove('show-hint');}});}
+document.addEventListener('click',(e)=>{const targetEl=e.target.closest('.interactive-object'); if(targetEl && nearObject && !isModalOpen()){openModal(nearObject);}});
+
+/* ===== Modal ===== */
+const content={
+  sobre:{title:'👤 Sobre Mim', html:`<div class="modal-section"><h3>Marcelo G S Correia</h3><p>🎯 <strong>Missão:</strong> Transformar ideias em palavras que vendem</p><p>⚔️ <strong>Classe:</strong> Copywriter Sênior & Estrategista</p><p>🎮 <strong>XP:</strong> 5+ anos de experiência comprovada</p><br><p>Especialista em criar conexões autênticas através de conteúdo estratégico que converte. Domino a arte de contar histórias que engajam e vendem.</p><br><p><strong>Especializações:</strong></p><p>• Copywriting de alta conversão</p><p>• Estratégia de conteúdo multicanal</p><p>• Funis de vendas otimizados</p><p>• Storytelling persuasivo</p></div>`},
+  experiencia:{title:'💼 Experiência Profissional', html:`<div class="modal-section"><h3>🏢 Analista de Conteúdo Sênior - Emitte</h3><p>📅 Outubro/2021 - Presente</p><p>🏆 <strong>Conquistas:</strong></p><p>• 12.000+ seguidores orgânicos</p><p>• 5.000 cliques mensais em CTAs</p><p>• 500 leads High Ticket por mês</p><p>• Crescimento 300% no YouTube</p></div><div class="modal-section"><h3>✍️ Copywriter Freelancer - Pontua</h3><p>📅 Agosto/2024 - Maio/2025</p><p>🎯 <strong>Resultados:</strong></p><p>• Lançamento de plataforma digital</p><p>• Campanhas com ROI 5x</p><p>• Criação de 20+ materiais ricos</p></div><div class="modal-section"><h3>📱 Assistente de Marketing - Compartilha Club</h3><p>📅 Janeiro - Outubro/2021</p><p>• Gestão de redes sociais</p><p>• Produção de conteúdo institucional</p></div>`},
+  habilidades:{title:'⚡ Habilidades & Poderes', html:`<div class="modal-section"><h3>🎯 Skills Principais</h3><div class="skill-bar"><div class="skill-fill" data-width="98" style="width:0%">Copywriting</div></div><div class="skill-bar"><div class="skill-fill" data-width="95" style="width:0%">IA Generativa</div></div><div class="skill-bar"><div class="skill-fill" data-width="92" style="width:0%">SEO & Analytics</div></div><div class="skill-bar"><div class="skill-fill" data-width="88" style="width:0%">Email Marketing</div></div><div class="skill-bar"><div class="skill-fill" data-width="90" style="width:0%">Roteirização</div></div></div><div class="modal-section"><h3>🛠️ Ferramentas Dominadas</h3><p>• Google Analytics 4 & Search Console</p><p>• Semrush & Ahrefs</p><p>• HubSpot & RD Station</p><p>• ChatGPT, Claude & Gemini (Expert)</p><p>• Canva & Figma</p></div><div class="modal-section"><h3>🌐 Idiomas</h3><p>🇧🇷 Português - Nativo</p><p>🇺🇸 Inglês - Avançado</p><p>🇪🇸 Espanhol - Intermediário</p></div>`},
+  portfolio:{title:'🎨 Portfólio & Formação', html:`<div class="modal-section"><h3>🎓 Formação Acadêmica</h3><p>📚 <strong>Marketing Digital</strong> - Uninter (cursando)</p><br><p><strong>Certificações:</strong></p><p>✅ Growth Hacking - Alura</p><p>✅ Google Analytics 4 - Alura</p><p>✅ SEO: Estratégias e Ferramentas - Alura</p><p>✅ Inbound Marketing - Rock University</p><p>✅ Produção de Conteúdo Web - Rock University</p></div><div class="modal-section"><h3>🌐 Onde Me Encontrar</h3><p>🔗 <strong>Site:</strong> copyguia.com.br</p><p>📱 <strong>Instagram:</strong> @copyguia.marcelo</p><p>📺 <strong>YouTube:</strong> marcelo.copyguia</p><p>📁 <strong>Drive:</strong> Portfólio completo disponível</p></div><div class="modal-section"><h3>📊 Números do Portfólio</h3><p>• 50+ Campanhas de alta conversão</p><p>• 100+ Artigos SEO otimizados</p><p>• 30+ E-books e materiais ricos</p><p>• 200+ Roteiros para vídeos</p><p>• 1000+ Posts para redes sociais</p></div>`},
+  contato:{title:'📞 Contato & Conexões', html:`<div class="modal-section"><h3>💬 Vamos Conversar!</h3><p>Estou sempre aberto a novos projetos e desafios. Se você busca um profissional que une criatividade, estratégia e resultados, vamos conversar!</p></div><div class="modal-section"><h3>📮 Contatos Diretos</h3><p>📧 <strong>Email:</strong> marcelogsc1@gmail.com</p><p>📱 <strong>WhatsApp:</strong> (61) 99188-8981</p><p>💼 <strong>LinkedIn:</strong> /in/marcelocorreia</p></div><div class="modal-section"><h3>🚀 Disponível Para</h3><p>• Projetos de copywriting</p><p>• Consultoria de conteúdo</p><p>• Estratégias de marketing digital</p><p>• Gestão de redes sociais</p><p>• Criação de funis de vendas</p></div><div class="modal-section" style="text-align:center;background:rgba(255,215,0,.1);"><p style="font-size:20px;color:#FFD700;">⚡ Pronto para transformar suas ideias em resultados? ⚡</p></div>`},
+  bonus:{title:'⭐ Easter Egg Descoberto!', html:`<div class="modal-section"><h3>🎉 Parabéns, Explorador!</h3><p style="text-align:center;font-size:20px;color:#FFD700;">Você encontrou o tesouro secreto!</p></div><div class="modal-section"><h3>🚀 Habilidades Ultra Raras</h3><p>⚡ <strong>Domínio Total de IAs:</strong></p><p>• Prompt Engineering Avançado</p><p>• Criação de Agentes Autônomos</p><p>• Automação com IA Generativa</p><br><p>💎 <strong>Super Poder Especial:</strong></p><p>Transformar briefings complexos em copies que convertem 3x mais que a média.</p></div>`}
+};
+function openModal(type){const b=document.getElementById('modalBackdrop'); const m=document.getElementById('infoModal'); const t=document.getElementById('modalTitle'); const c=document.getElementById('modalContent'); if(content[type]){t.textContent=content[type].title; c.innerHTML=`<div class="modal-scroll-inner">${content[type].html}</div>`; b.classList.add('active'); m.classList.add('active'); if(type==='habilidades'){setTimeout(()=>{c.querySelectorAll('.skill-fill').forEach(bar=>{bar.style.width=bar.dataset.width+'%';});},100);} c.focus({preventScroll:true});}}
+function closeModal(){const b=document.getElementById('modalBackdrop'); const m=document.getElementById('infoModal'); m.classList.remove('active'); b.classList.remove('active'); m.querySelectorAll('.skill-fill').forEach(bar=> bar.style.width='0%');}
+document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+
+/* ===== Música (mantida from v3 suave) ===== */
+const musicToggleBtn=document.getElementById('musicToggle'); const audioStatus=document.getElementById('audioStatus'); const presetSelect=document.getElementById('musicPreset');
+const MusicEngine={ctx:null, master:null, lp:null, delay:null, fb:null, started:false, isMuted:false, volume:0.16, preset:'v3', seq:null,
+  ensureContext(){ if(!this.ctx){ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); } if(!this.master){ this.master=this.ctx.createGain(); this.master.gain.value=0.001; this.lp=this.ctx.createBiquadFilter(); this.lp.type='lowpass'; this.lp.frequency.value=3400; this.delay=this.ctx.createDelay(1.0); this.fb=this.ctx.createGain(); this.delay.delayTime.value=0.22; this.fb.gain.value=0.28; this.master.connect(this.ctx.destination); this.delay.connect(this.fb); this.fb.connect(this.delay); this.delay.connect(this.lp); this.lp.connect(this.master);} },
+  stop(){ try{ if(this.seq && this.seq.timerID) clearInterval(this.seq.timerID); }catch(e){} this.seq=null; },
+  buildGraph(preset='v3'){ this.stop(); this.preset=preset; this.ensureContext(); if(preset==='v3'){ const tempo=78; const spb=60/tempo; const sixteenth=spb/4; const scale={C3:130.81,C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A3:220.00,A4:440.00,B4:493.88,C5:523.25}; const chords=[ ['C4','E4','G4'], ['A3','C4','E4'], ['F4','A4','C5'], ['G4','B4','D4'] ]; const lead=[ 'E4',null,null,null, 'G4',null,null,null, 'A4',null,null,null, 'G4',null,'D4',null ]; const bassPat=[ 'C3',null,null,null, null,null,null,null, 'F4',null,null,null, 'G4',null,null,null ]; const hatPat=[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]; const snrPat=[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0]; const kickPat=[1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]; const env=(g,a=0.006,d=0.18,s=0.001)=>{ const t=this.ctx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.15,t+a); g.gain.exponentialRampToValueAtTime(s,t+a+d); }; const note=(f,dur=sixteenth*1.5,type='square',toDelay=true)=>{ const osc=this.ctx.createOscillator(); osc.type=type; osc.frequency.value=f; const vibr=this.ctx.createOscillator(); vibr.type='sine'; vibr.frequency.value=5; const vg=this.ctx.createGain(); vg.gain.value=(type==='square'?2.8:1.2); vibr.connect(vg); vg.connect(osc.frequency); const g=this.ctx.createGain(); env(g); const filt=this.ctx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=(type==='square'?2600:1500); osc.connect(filt); filt.connect(g); if(toDelay) g.connect(this.delay); g.connect(this.master); osc.start(); vibr.start(); osc.stop(this.ctx.currentTime+dur); }; const bass=(f)=>{ const o=this.ctx.createOscillator(); o.type='triangle'; o.frequency.value=f/2; const g=this.ctx.createGain(); env(g,0.004,0.12,0.0012); const lp=this.ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=700; o.connect(lp); lp.connect(g); g.connect(this.master); o.start(); o.stop(this.ctx.currentTime+sixteenth*1.2); }; const hat=()=>{ const src=this.ctx.createBufferSource(); const buf=this.ctx.createBuffer(1,this.ctx.sampleRate*0.02,this.ctx.sampleRate); const data=buf.getChannelData(0); for(let i=0;i<data.length;i++){ data[i]=(Math.random()*2-1)*(1-i/data.length); } src.buffer=buf; const g=this.ctx.createGain(); g.gain.value=0.06; const hp=this.ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=6000; src.connect(hp); hp.connect(g); g.connect(this.master); src.start(); }; const snr=()=>{ const src=this.ctx.createBufferSource(); const buf=this.ctx.createBuffer(1,this.ctx.sampleRate*0.06,this.ctx.sampleRate); const data=buf.getChannelData(0); for(let i=0;i<data.length;i++){ data[i]=(Math.random()*2-1)*(1-i/data.length); } src.buffer=buf; const g=this.ctx.createGain(); g.gain.value=0.11; const bp=this.ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1600; src.connect(bp); bp.connect(g); g.connect(this.delay); g.connect(this.master); src.start(); }; const kick=()=>{ const o=this.ctx.createOscillator(); o.type='sine'; const g=this.ctx.createGain(); const t=this.ctx.currentTime; o.frequency.setValueAtTime(110,t); o.frequency.exponentialRampToValueAtTime(46,t+0.12); g.gain.setValueAtTime(0.18,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.16); o.connect(g); g.connect(this.master); o.start(); o.stop(t+0.17); }; const arp=(chIdx,s)=>{ if(s%2!==0) return; const tri=chords[chIdx%chords.length]; const pick=tri[(s/2)%3]; note(scale[pick], sixteenth*1.2, 'square', true); }; const schedule=()=>{ while(this.seq.nextNoteTime < this.ctx.currentTime + this.seq.scheduleAheadTime){ const s=this.seq.current16th%16; const bar=Math.floor(this.seq.current16th/16)%4; const ln=lead[s]; if(ln){ note(scale[ln], sixteenth*1.4, 'square', true); } arp(bar,s); const bn=bassPat[s]; if(bn){ bass(scale[bn]); } if(kickPat[s]) kick(); if(hatPat[s]) hat(); if(snrPat[s]) snr(); this.seq.nextNoteTime += sixteenth; this.seq.current16th++; } }; this.seq={ tempo, sixteenth, current16th:0, nextNoteTime:this.ctx.currentTime+0.1, scheduleAheadTime:0.20, lookahead:25, timerID:null }; this.seq.timerID=setInterval(schedule, this.seq.lookahead); const tNow=this.ctx.currentTime; this.master.gain.cancelScheduledValues(tNow); const target=this.isMuted?0.0001:this.volume; this.master.gain.setValueAtTime(this.master.gain.value,tNow); this.master.gain.linearRampToValueAtTime(target,tNow+1.5); } else { legacyBuilder(preset); } },
+  async start(preset){ this.ensureContext(); if(this.ctx.state==='suspended'){ try{ await this.ctx.resume(); }catch(e){} } if(!this.started){ this.started=true; this.isMuted=false; } this.buildGraph(preset||this.preset); },
+  toggleMute(){ if(!this.ctx) return; const tNow=this.ctx.currentTime; this.master.gain.cancelScheduledValues(tNow); if(this.isMuted){ this.master.gain.linearRampToValueAtTime(this.volume,tNow+0.4); this.isMuted=false; } else { this.master.gain.linearRampToValueAtTime(0.0001,tNow+0.35); this.isMuted=true; } updateAudioUI(); },
+  setPreset(p){ this.preset=p; if(this.started){ this.buildGraph(p); } }
+};
+function legacyBuilder(preset){ const M=MusicEngine; const ctx=M.ctx; M.delay=ctx.createDelay(1.2); M.fb=ctx.createGain(); if(preset==='v1'){ M.delay.delayTime.value=0.28; M.fb.gain.value=0.35; } else { M.delay.delayTime.value=0.36; M.fb.gain.value=0.42; } M.delay.connect(M.fb); M.fb.connect(M.delay); M.delay.connect(M.lp); let padNotes, scaleArr, lfoBase; if(preset==='v1'){ padNotes=[146.83,174.61,220.00]; scaleArr=[146.83,164.81,174.61,196.00,220.00,246.94,261.63]; lfoBase=0.08; } else { padNotes=[196.00,246.94,293.66]; scaleArr=[196.00,220.00,246.94,261.63,293.66,329.63,349.23]; lfoBase=0.06; const drone=ctx.createOscillator(); drone.type='sine'; drone.frequency.value=98.00; const dg=ctx.createGain(); dg.gain.value=0.03; drone.connect(dg); dg.connect(M.delay); dg.connect(M.master); drone.start(); } padNotes.forEach((f,i)=>{ const osc=ctx.createOscillator(); osc.type=i===0?'sine':(i===1?'triangle':'sawtooth'); osc.frequency.value=f; const filt=ctx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=(preset==='v1')?800:950; const g=ctx.createGain(); g.gain.value=0.06; const lfo=ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=lfoBase+i*0.03; const lfoGain=ctx.createGain(); lfoGain.gain.value=2.5; lfo.connect(lfoGain); lfoGain.connect(osc.frequency); osc.connect(filt); filt.connect(g); g.connect(M.delay); g.connect(M.master); osc.start(); lfo.start(); }); const noiseBuf=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate); const data=noiseBuf.getChannelData(0); for(let i=0;i<data.length;i++){ data[i]=(Math.random()*2-1)*0.02; } const noiseSrc=ctx.createBufferSource(); noiseSrc.buffer=noiseBuf; noiseSrc.loop=true; const noiseGain=ctx.createGain(); noiseGain.gain.value=(preset==='v1')?0.03:0.02; const nFilt=ctx.createBiquadFilter(); nFilt.type='highpass'; nFilt.frequency.value=(preset==='v1')?600:500; noiseSrc.connect(nFilt); nFilt.connect(noiseGain); noiseGain.connect(M.master); noiseSrc.start(); const pluck=()=>{ if(!ctx || ctx.state!=='running') return; const f=scaleArr[Math.floor(Math.random()*scaleArr.length)]*(Math.random()<0.3?2:1); const osc=ctx.createOscillator(); osc.type='triangle'; osc.frequency.value=f; const filt=ctx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=(preset==='v1')?1200:1500; const g=ctx.createGain(); g.gain.setValueAtTime(0.0,ctx.currentTime); g.gain.linearRampToValueAtTime(0.12,ctx.currentTime+0.01); g.gain.exponentialRampToValueAtTime(0.0008,ctx.currentTime+(preset==='v1'?0.65:0.85)); osc.connect(filt); filt.connect(g); g.connect(M.delay); g.connect(M.master); osc.start(); osc.stop(ctx.currentTime+(preset==='v1'?0.65:0.85)); const next=(preset==='v1')?(900+Math.random()*1100):(600+Math.random()*900); setTimeout(pluck,next); }; pluck(); const tNow=ctx.currentTime; M.master.gain.cancelScheduledValues(tNow); const target=M.isMuted?0.0001:M.volume; M.master.gain.setValueAtTime(M.master.gain.value,tNow); M.master.gain.linearRampToValueAtTime(target,tNow+1.5); }
+
+function ensureAudioStarted(){ if(!MusicEngine.started){ MusicEngine.start(MusicEngine.preset); updateAudioUI(); } }
+function updateAudioUI(){ const musicToggleBtn=document.getElementById('musicToggle'); const audioStatus=document.getElementById('audioStatus'); audioStatus.textContent= MusicEngine.isMuted ? 'Off' : 'On'; musicToggleBtn.setAttribute('aria-pressed',(!MusicEngine.isMuted).toString()); musicToggleBtn.firstChild && (musicToggleBtn.firstChild.textContent = MusicEngine.isMuted ? '🔇 ' : '🔊 '); }
+document.getElementById('musicToggle').addEventListener('click', async ()=>{ await ensureAudioStarted(); MusicEngine.toggleMute(); });
+document.getElementById('musicPreset').addEventListener('change', async (e)=>{ await ensureAudioStarted(); MusicEngine.setPreset(e.target.value); });
+
+/* ===== Loop ===== */
+function gameLoop(){ movePlayer(); requestAnimationFrame(gameLoop); }
+function init(){ createObjects(); player.style.left=playerX+'px'; player.style.top=playerY+'px'; fitToWindow(); gameLoop(); console.log('%c🎮 Óculos refinado + ícones levemente mais baixos','color:#FFD700;font-size:18px'); }
+init();
+</script>
+</body>
+</html>
