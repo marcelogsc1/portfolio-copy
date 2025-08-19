@@ -42,20 +42,19 @@ body{font-family:'VT323',monospace;background:#0a0a0a;color:#fff}
 
 /* Variações + animações dos ícones */
 .work-desk .tile-inner{ background:linear-gradient(180deg,#A8683A,#7B4A27); border-color:#5b3a1f }
-.work-desk .tile-inner::before{ content:'📝' }
+.work-desk .tile-inner::before{ content:'👤' } /* Alterado de 📝 para 👤 */
 
 .computer-station .tile-inner{ background:linear-gradient(180deg,#2C3E50,#1B2A36); border-color:#0f1a22 }
-.computer-station .tile-inner::before{ content:'💻'; animation:screenGlow 2s infinite }
-@keyframes screenGlow{0%,100%{filter:brightness(1) drop-shadow(0 0 4px rgba(52,152,219,.5))}50%{filter:brightness(1.2) drop-shadow(0 0 8px rgba(52,152,219,.8))}}
+.computer-station .tile-inner::before{ content:'💼' } /* Alterado de 💻 para 💼 */
 
 .bookshelf .tile-inner{ background:linear-gradient(180deg,#6D4C41,#4E342E); border-color:#3E2723 }
-.bookshelf .tile-inner::before{ content:'📚' }
+.bookshelf .tile-inner::before{ content:'🎯' } /* Alterado de 📚 para 🎯 */
 
 .portfolio-stand .tile-inner{ background:linear-gradient(180deg,#E74C3C,#A93226); border-color:#922B21 }
 .portfolio-stand .tile-inner::before{ content:'🎨' }
 
 .contact-phone .tile-inner{ background:linear-gradient(180deg,#27AE60,#1E8449); border-color:#145A32 }
-.contact-phone .tile-inner::before{ content:'📞'; animation:ring 2s infinite }
+.contact-phone .tile-inner::before{ content:'�'; animation:ring 2s infinite }
 @keyframes ring{0%,100%{transform:translate(-50%,-50%) rotate(0)}10%,30%{transform:translate(-50%,-50%) rotate(-10deg)}20%,40%{transform:translate(-50%,-50%) rotate(10deg)}}
 
 .treasure-chest .tile-inner{ background:linear-gradient(180deg,#FFC107,#FF9800); border-color:#B9770E; box-shadow:0 10px 24px rgba(255,193,7,.25), inset 0 2px 10px rgba(255,255,255,.15)}
@@ -125,6 +124,17 @@ body{font-family:'VT323',monospace;background:#0a0a0a;color:#fff}
 .modal-section{background:rgba(255,255,255,.05);border:1px solid rgba(255,215,0,.2);padding:18px;border-radius:12px;margin-bottom:18px;backdrop-filter:blur(5px)}
 .modal-section h3{color:#FFD700;margin-bottom:12px;font-size:22px;text-shadow:0 2px 4px rgba(0,0,0,.3)}
 .modal-section p{font-size:18px;line-height:1.6;margin-bottom:8px}
+/* Estilo para os links clicáveis */
+.modal-section a {
+    color: #87CEEB;
+    text-decoration: underline;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+.modal-section a:hover {
+    color: #FFD700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+}
+
 .skill-bar{background:rgba(0,0,0,.4);height:28px;margin:10px 0;border-radius:14px;overflow:hidden;border:1px solid rgba(255,215,0,.3)}
 .skill-fill{height:100%;background:linear-gradient(90deg,#27AE60,#52BE80,#27AE60);background-size:200% 100%;display:flex;align-items:center;padding-left:12px;font-size:16px;font-weight:bold;transition:width 1.5s cubic-bezier(.4,0,.2,1);animation:shimmer 2s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -249,8 +259,8 @@ document.addEventListener('click',(e)=>{const targetEl=e.target.closest('.intera
 const content={
   sobre:{title:'👤 Sobre Mim', html:`<div class="modal-section"><h3>Marcelo G S Correia</h3><p>🎯 <strong>Missão:</strong> Transformar ideias em palavras que vendem</p><p>⚔️ <strong>Classe:</strong> Copywriter Sênior & Estrategista</p><p>🎮 <strong>XP:</strong> 5+ anos de experiência comprovada</p><br><p>Especialista em criar conexões autênticas através de conteúdo estratégico que converte. Domino a arte de contar histórias que engajam e vendem.</p><br><p><strong>Especializações:</strong></p><p>• Copywriting de alta conversão</p><p>• Estratégia de conteúdo multicanal</p><p>• Funis de vendas otimizados</p><p>• Storytelling persuasivo</p></div>`},
   experiencia:{title:'💼 Experiência Profissional', html:`<div class="modal-section"><h3>🏢 Analista de Conteúdo Sênior - Emitte</h3><p>📅 Outubro/2021 - Presente</p><p>🏆 <strong>Conquistas:</strong></p><p>• 12.000+ seguidores orgânicos</p><p>• 5.000 cliques mensais em CTAs</p><p>• 500 leads High Ticket por mês</p><p>• Crescimento 300% no YouTube</p></div><div class="modal-section"><h3>✍️ Copywriter Freelancer - Pontua</h3><p>📅 Agosto/2024 - Maio/2025</p><p>🎯 <strong>Resultados:</strong></p><p>• Lançamento de plataforma digital</p><p>• Campanhas com ROI 5x</p><p>• Criação de 20+ materiais ricos</p></div><div class="modal-section"><h3>📱 Assistente de Marketing - Compartilha Club</h3><p>📅 Janeiro - Outubro/2021</p><p>• Gestão de redes sociais</p><p>• Produção de conteúdo institucional</p></div>`},
-  habilidades:{title:'⚡ Habilidades & Poderes', html:`<div class="modal-section"><h3>🎯 Skills Principais</h3><div class="skill-bar"><div class="skill-fill" data-width="98" style="width:0%">Copywriting</div></div><div class="skill-bar"><div class="skill-fill" data-width="95" style="width:0%">IA Generativa</div></div><div class="skill-bar"><div class="skill-fill" data-width="92" style="width:0%">SEO & Analytics</div></div><div class="skill-bar"><div class="skill-fill" data-width="88" style="width:0%">Email Marketing</div></div><div class="skill-bar"><div class="skill-fill" data-width="90" style="width:0%">Roteirização</div></div></div><div class="modal-section"><h3>🛠️ Ferramentas Dominadas</h3><p>• Google Analytics 4 & Search Console</p><p>• Semrush & Ahrefs</p><p>• HubSpot & RD Station</p><p>• ChatGPT, Claude & Gemini (Expert)</p><p>• Canva & Figma</p></div><div class="modal-section"><h3>🌐 Idiomas</h3><p>🇧🇷 Português - Nativo</p><p>🇺🇸 Inglês - Avançado</p><p>🇪🇸 Espanhol - Intermediário</p></div>`},
-  portfolio:{title:'🎨 Portfólio & Formação', html:`<div class="modal-section"><h3>🎓 Formação Acadêmica</h3><p>📚 <strong>Marketing Digital</strong> - Uninter (cursando)</p><br><p><strong>Certificações:</strong></p><p>✅ Growth Hacking - Alura</p><p>✅ Google Analytics 4 - Alura</p><p>✅ SEO: Estratégias e Ferramentas - Alura</p><p>✅ Inbound Marketing - Rock University</p><p>✅ Produção de Conteúdo Web - Rock University</p></div><div class="modal-section"><h3>🌐 Onde Me Encontrar</h3><p>🔗 <strong>Site:</strong> copyguia.com.br</p><p>📱 <strong>Instagram:</strong> @copyguia.marcelo</p><p>📺 <strong>YouTube:</strong> marcelo.copyguia</p><p>📁 <strong>Drive:</strong> Portfólio completo disponível</p></div><div class="modal-section"><h3>📊 Números do Portfólio</h3><p>• 50+ Campanhas de alta conversão</p><p>• 100+ Artigos SEO otimizados</p><p>• 30+ E-books e materiais ricos</p><p>• 200+ Roteiros para vídeos</p><p>• 1000+ Posts para redes sociais</p></div>`},
+  habilidades:{title:'🎯 Habilidades & Poderes', html:`<div class="modal-section"><h3>🎯 Skills Principais</h3><div class="skill-bar"><div class="skill-fill" data-width="98" style="width:0%">Copywriting</div></div><div class="skill-bar"><div class="skill-fill" data-width="95" style="width:0%">IA Generativa</div></div><div class="skill-bar"><div class="skill-fill" data-width="92" style="width:0%">SEO & Analytics</div></div><div class="skill-bar"><div class="skill-fill" data-width="88" style="width:0%">Email Marketing</div></div><div class="skill-bar"><div class="skill-fill" data-width="90" style="width:0%">Roteirização</div></div></div><div class="modal-section"><h3>🛠️ Ferramentas Dominadas</h3><p>• Google Analytics 4 & Search Console</p><p>• Semrush & Ahrefs</p><p>• HubSpot & RD Station</p><p>• ChatGPT, Claude & Gemini (Expert)</p><p>• Canva & Figma</p></div><div class="modal-section"><h3>🌐 Idiomas</h3><p>🇧🇷 Português - Nativo</p><p>🇺🇸 Inglês - Avançado</p><p>🇪🇸 Espanhol - Intermediário</p></div>`},
+  portfolio:{title:'🎨 Portfólio & Formação', html:`<div class="modal-section"><h3>🎓 Formação Acadêmica</h3><p>📚 <strong>Marketing Digital</strong> - Uninter (cursando)</p><br><p><strong>Certificações:</strong></p><p>✅ Growth Hacking - Alura</p><p>✅ Google Analytics 4 - Alura</p><p>✅ SEO: Estratégias e Ferramentas - Alura</p><p>✅ Inbound Marketing - Rock University</p><p>✅ Produção de Conteúdo Web - Rock University</p></div><div class="modal-section"><h3>🌐 Onde Me Encontrar</h3><p>🔗 <strong>Site:</strong> <a href="https://copyguia.vercel.app/" target="_blank">copyguia.vercel.app</a></p><p>📱 <strong>Instagram:</strong> <a href="https://www.instagram.com/copyguia.marcelo/" target="_blank">@copyguia.marcelo</a></p><p>📺 <strong>YouTube:</strong> <a href="https://www.youtube.com/@marcelo.copyguia/videos" target="_blank">@marcelo.copyguia</a></p><p>📁 <strong>Drive:</strong> <a href="https://drive.google.com/drive/folders/1jU6iiw0zMtB81QsiZq7y6ur-H_JCTmTV?usp=sharing" target="_blank">Portfólio completo disponível</a></p></div><div class="modal-section"><h3>📊 Números do Portfólio</h3><p>• 50+ Campanhas de alta conversão</p><p>• 100+ Artigos SEO otimizados</p><p>• 30+ E-books e materiais ricos</p><p>• 200+ Roteiros para vídeos</p><p>• 1000+ Posts para redes sociais</p></div>`},
   contato:{title:'📞 Contato & Conexões', html:`<div class="modal-section"><h3>💬 Vamos Conversar!</h3><p>Estou sempre aberto a novos projetos e desafios. Se você busca um profissional que une criatividade, estratégia e resultados, vamos conversar!</p></div><div class="modal-section"><h3>📮 Contatos Diretos</h3><p>📧 <strong>Email:</strong> marcelogsc1@gmail.com</p><p>📱 <strong>WhatsApp:</strong> (61) 99188-8981</p><p>💼 <strong>LinkedIn:</strong> /in/marcelocorreia</p></div><div class="modal-section"><h3>🚀 Disponível Para</h3><p>• Projetos de copywriting</p><p>• Consultoria de conteúdo</p><p>• Estratégias de marketing digital</p><p>• Gestão de redes sociais</p><p>• Criação de funis de vendas</p></div><div class="modal-section" style="text-align:center;background:rgba(255,215,0,.1);"><p style="font-size:20px;color:#FFD700;">⚡ Pronto para transformar suas ideias em resultados? ⚡</p></div>`},
   bonus:{title:'⭐ Easter Egg Descoberto!', html:`<div class="modal-section"><h3>🎉 Parabéns, Explorador!</h3><p style="text-align:center;font-size:20px;color:#FFD700;">Você encontrou o tesouro secreto!</p></div><div class="modal-section"><h3>🚀 Habilidades Ultra Raras</h3><p>⚡ <strong>Domínio Total de IAs:</strong></p><p>• Prompt Engineering Avançado</p><p>• Criação de Agentes Autônomos</p><p>• Automação com IA Generativa</p><br><p>💎 <strong>Super Poder Especial:</strong></p><p>Transformar briefings complexos em copies que convertem 3x mais que a média.</p></div>`}
 };
@@ -282,3 +292,4 @@ init();
 </script>
 </body>
 </html>
+�
